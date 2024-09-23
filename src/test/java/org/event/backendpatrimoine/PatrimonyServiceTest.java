@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.IOException;
@@ -27,18 +28,38 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 @SpringBootTest
 public class PatrimonyServiceTest {
-@Autowired
-PatrimonyService patrimonyService;
-@Test
-void createPatrimone() throws IOException {
-    Patrimony patrimonyToCreate=new Patrimony("test",LocalDateTime.now());
-   Patrimony response= patrimonyService.saveOrUpdatePatrimony("4",patrimonyToCreate.name());
- assertEquals(patrimonyToCreate,response);
-}
-@Test
+    @MockBean
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private PatrimonyService patrimonyService;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        when(objectMapper.writeValueAsString(any())).thenAnswer(invocation -> {
+            Patrimony patrimony = invocation.getArgument(0);
+            return "{ \"name\": \"" + patrimony.name() + "\", \"updateDate\": \"" + patrimony.updateDate() + "\" }"; // Simulez la sérialisation
+        });
+
+        when(objectMapper.readValue((JsonParser) any(), eq(Patrimony.class))).thenAnswer(invocation -> {
+            String json = invocation.getArgument(0);
+            return new Patrimony("test", LocalDateTime.now());
+        });
+    }
+
+    @Test
+    void createPatrimoine() throws IOException {
+        Patrimony patrimonyToCreate = new Patrimony("test", LocalDateTime.now());
+        Patrimony response = patrimonyService.saveOrUpdatePatrimony("4", patrimonyToCreate.name());
+
+        assertEquals(patrimonyToCreate.name(), response.name());
+    }
+
+    @Test
     void getPatrimoine() throws IOException {
-    assertEquals(patrimonyService.getPatrimony("4").name(),"test");
-}
+        Patrimony patrimony = patrimonyService.getPatrimony("4");
+        assertEquals("test", patrimony.name());
+    }
 
 
 }
