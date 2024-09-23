@@ -1,7 +1,8 @@
 package org.event.backendpatrimoine.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.event.backendpatrimoine.modal.Patrimoiny;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.event.backendpatrimoine.modal.Patrimony;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -13,25 +14,26 @@ import java.time.LocalDateTime;
 @Service
 public class PatrimonyService {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final Path basePath = Paths.get("patrimoines");
+    private final Path basePath = Paths.get("src/main/resources/patrimoine");
 
     public PatrimonyService() throws IOException {
+        objectMapper.registerModule(new JavaTimeModule());
         if (!Files.exists(basePath)) {
             Files.createDirectories(basePath);
         }
     }
 
-    public Patrimoiny getPatrimoine(String id) throws IOException {
+    public Patrimony getPatrimoine(String id) throws IOException {
         Path path = getFilePath(id);
         if (Files.exists(path)) {
-            return objectMapper.readValue(path.toFile(), Patrimoiny.class);
+            return objectMapper.readValue(path.toFile(), Patrimony.class);
         } else {
             throw new RuntimeException("Patrimoine not found");
         }
     }
 
-    public void saveOrUpdatePatrimoine(String id, Patrimoiny patrimoine) throws IOException {
-        patrimoine.setDerniereModification(LocalDateTime.now());
+    public void saveOrUpdatePatrimoine(String id, Patrimony patrimoine) throws IOException {
+        patrimoine.setUpdateDate(LocalDateTime.now());
         objectMapper.writeValue(getFilePath(id).toFile(), patrimoine);
     }
 

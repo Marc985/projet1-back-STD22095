@@ -1,14 +1,15 @@
 package org.event.backendpatrimoine.modal;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 
-import javax.swing.*;
 import java.time.LocalDateTime;
-import java.util.Date;
+
 @Getter
-public class Patrimoiny {
-    private int id;
+public class Patrimony {
     private String name;
+    @Setter
     private LocalDateTime updateDate;
+
+
 }
