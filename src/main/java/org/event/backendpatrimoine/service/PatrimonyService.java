@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.event.backendpatrimoine.exception.InvalidPatrimoine;
 import org.event.backendpatrimoine.exception.PatrimonyNotFound;
 import org.event.backendpatrimoine.modal.Patrimony;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,20 +15,18 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 @Service
-public class PatrimonyService {
+public  class PatrimonyService {
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private  Path basePath ;
+    private final Path basePath ;
+
 
     public PatrimonyService() throws IOException {
         this.basePath=Paths.get("src/main/resources/patrimoine");
-        objectMapper.registerModule(new JavaTimeModule());
         if (!Files.exists(basePath)) {
             Files.createDirectories(basePath);
         }
     }
-    public PatrimonyService(Path basePath){
-        this.basePath=basePath;
-    }
+
 
 
     public Patrimony getPatrimony(String id) throws IOException {
@@ -54,4 +53,6 @@ public class PatrimonyService {
     private Path getFilePath(String id) {
         return basePath.resolve(id + ".json");
     }
+
+
 }
