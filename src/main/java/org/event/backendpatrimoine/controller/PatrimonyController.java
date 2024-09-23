@@ -13,11 +13,11 @@ public class PatrimonyController {
     PatrimonyService patrimonyService;
     @GetMapping("/patrimony/{id}")
     public Patrimony getPatrimony(@PathVariable String id) throws IOException {
-        return  patrimonyService.getPatrimoine(id);
+        return  patrimonyService.getPatrimony(id);
     }
     @PutMapping("/patrimony/{id}")
-    public void createOrUpdate(@PathVariable String id, @RequestBody Patrimony patrimoiny) throws IOException {
-        patrimonyService.saveOrUpdatePatrimoine(id, patrimoiny);
+    public Patrimony createOrUpdate(@PathVariable String id, @RequestBody Patrimony patrimony) throws IOException {
+       return patrimonyService.saveOrUpdatePatrimony(id,patrimony.name());
     }
 
 }

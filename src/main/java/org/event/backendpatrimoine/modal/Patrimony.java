@@ -5,11 +5,7 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter
-public class Patrimony {
-    private String name;
-    @Setter
-    private LocalDateTime updateDate;
+import java.time.LocalDateTime;
 
-
+public record Patrimony(String name, LocalDateTime updateDate) {
 }
