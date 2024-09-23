@@ -20,19 +20,16 @@ public  class PatrimonyService {
     private final Path basePath ;
 
 
-
-    public PatrimonyService(Path basePath) throws IOException {
-        this.objectMapper = new ObjectMapper();
-        this.basePath = basePath;
+    public PatrimonyService() throws IOException {
+        this.objectMapper= new ObjectMapper();
+        this.objectMapper.registerModule(new JavaTimeModule());
+        this.basePath=Paths.get("src/main/resources/patrimoine");
         if (!Files.exists(basePath)) {
             Files.createDirectories(basePath);
         }
     }
 
 
-    public PatrimonyService() throws IOException {
-        this(Paths.get("src/main/resources/patrimoine"));
-    }
 
 
 

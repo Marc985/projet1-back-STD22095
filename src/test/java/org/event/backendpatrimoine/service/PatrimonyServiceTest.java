@@ -1,4 +1,4 @@
-package org.event.backendpatrimoine;
+package org.event.backendpatrimoine.service;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
