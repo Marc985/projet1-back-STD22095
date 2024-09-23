@@ -3,6 +3,7 @@ package org.event.backendpatrimoine;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.event.backendpatrimoine.exception.InvalidPatrimoine;
 import org.event.backendpatrimoine.exception.PatrimonyNotFound;
 import org.event.backendpatrimoine.modal.Patrimony;
@@ -36,9 +37,12 @@ public class PatrimonyServiceTest {
 
     @BeforeEach
     void setUp() throws IOException {
+        ObjectMapper mockMapper = new ObjectMapper();
+        mockMapper.registerModule(new JavaTimeModule());
+
         when(objectMapper.writeValueAsString(any())).thenAnswer(invocation -> {
             Patrimony patrimony = invocation.getArgument(0);
-            return "{ \"name\": \"" + patrimony.name() + "\", \"updateDate\": \"" + patrimony.updateDate() + "\" }"; // Simulez la sérialisation
+            return mockMapper.writeValueAsString(patrimony);
         });
 
         when(objectMapper.readValue((JsonParser) any(), eq(Patrimony.class))).thenAnswer(invocation -> {

@@ -16,15 +16,22 @@ import java.time.LocalDateTime;
 
 @Service
 public  class PatrimonyService {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper ;
     private final Path basePath ;
 
 
-    public PatrimonyService() throws IOException {
-        this.basePath=Paths.get("src/main/resources/patrimoine");
+
+    public PatrimonyService(Path basePath) throws IOException {
+        this.objectMapper = new ObjectMapper();
+        this.basePath = basePath;
         if (!Files.exists(basePath)) {
             Files.createDirectories(basePath);
         }
+    }
+
+    // Default constructor with the hardcoded path
+    public PatrimonyService() throws IOException {
+        this(Paths.get("src/main/resources/patrimoine"));
     }
 
 
