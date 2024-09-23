@@ -29,7 +29,7 @@ public  class PatrimonyService {
         }
     }
 
-    // Default constructor with the hardcoded path
+
     public PatrimonyService() throws IOException {
         this(Paths.get("src/main/resources/patrimoine"));
     }
